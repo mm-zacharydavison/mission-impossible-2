@@ -1,3 +1,12 @@
+# Mission Impossible 2: Why Social Scientists Are Cooked
+
+This is a copy of a repository created as part of the following paper.
+https://github.com/survey-data-quality-lab/mission-possible/blob/main/paper/working-paper.pdf 
+
+It provides an example agent `tom-cruise` that completely defeats their proposed data quality control questions.
+
+----
+
 # Mission Possible: The Collection of High-Quality Data
 
 Welcome 👋  
