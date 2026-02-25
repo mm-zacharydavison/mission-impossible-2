@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Survey - Decision Task</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header><h1>Research Survey</h1></header>
+  <main>
+    <section class="survey-section">
+      <h2>Decision Task</h2>
+      <p>You have been given <strong>$10</strong> to split with another anonymous participant. How much would you like to give to the other participant?</p>
+
+      <form method="POST" action="/debrief">
+        <input type="hidden" name="__tracking" value="">
+
+        <div class="form-group slider-group">
+          <label for="dictator_amount">Amount to give: $<span id="slider-value">5</span></label>
+          <input type="range" name="dictator_amount" id="dictator_amount"
+                 min="0" max="10" step="1" value="5">
+          <div class="slider-labels">
+            <span>$0</span>
+            <span>$5</span>
+            <span>$10</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-next">Next</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script>
+    const slider = document.getElementById('dictator_amount');
+    const display = document.getElementById('slider-value');
+    slider.addEventListener('input', () => { display.textContent = slider.value; });
+  </script>
+  <script src="/tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Survey - Demographics</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header><h1>Research Survey</h1></header>
+  <main>
+    <section class="survey-section">
+      <h2>Demographics</h2>
+      <form method="POST" action="/attention-video">
+        <input type="hidden" name="__tracking" value="">
+
+        <fieldset>
+          <legend>What is your age range?</legend>
+          <label><input type="radio" name="age" value="18-24" required> 18-24</label>
+          <label><input type="radio" name="age" value="25-34"> 25-34</label>
+          <label><input type="radio" name="age" value="35-44"> 35-44</label>
+          <label><input type="radio" name="age" value="45-54"> 45-54</label>
+          <label><input type="radio" name="age" value="55-64"> 55-64</label>
+          <label><input type="radio" name="age" value="65+"> 65+</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>What is your gender?</legend>
+          <label><input type="radio" name="gender" value="male" required> Male</label>
+          <label><input type="radio" name="gender" value="female"> Female</label>
+          <label><input type="radio" name="gender" value="non-binary"> Non-binary</label>
+          <label><input type="radio" name="gender" value="prefer-not-to-say"> Prefer not to say</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>What is your highest level of education?</legend>
+          <label><input type="radio" name="education" value="high-school" required> High school</label>
+          <label><input type="radio" name="education" value="some-college"> Some college</label>
+          <label><input type="radio" name="education" value="bachelors"> Bachelor's degree</label>
+          <label><input type="radio" name="education" value="masters"> Master's degree</label>
+          <label><input type="radio" name="education" value="doctorate"> Doctorate</label>
+        </fieldset>
+
+        <div class="form-group">
+          <label for="state">What state do you live in?</label>
+          <select name="state" id="state" required>
+            <option value="">-- Select --</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+            <option>Arkansas</option><option>California</option><option>Colorado</option>
+            <option>Connecticut</option><option>Delaware</option><option>District of Columbia</option>
+            <option>Florida</option><option>Georgia</option><option>Hawaii</option>
+            <option>Idaho</option><option>Illinois</option><option>Indiana</option>
+            <option>Iowa</option><option>Kansas</option><option>Kentucky</option>
+            <option>Louisiana</option><option>Maine</option><option>Maryland</option>
+            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option>
+            <option>Mississippi</option><option>Missouri</option><option>Montana</option>
+            <option>Nebraska</option><option>Nevada</option><option>New Hampshire</option>
+            <option>New Jersey</option><option>New Mexico</option><option>New York</option>
+            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option>
+            <option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option>
+            <option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option>
+            <option>Tennessee</option><option>Texas</option><option>Utah</option>
+            <option>Vermont</option><option>Virginia</option><option>Washington</option>
+            <option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-next">Next</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="/tracker.js"></script>
+</body>
+</html>

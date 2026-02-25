@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Survey - Opinions</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header><h1>Research Survey</h1></header>
+  <main>
+    <section class="survey-section">
+      <h2>Climate Policy Opinions</h2>
+      <p>Please indicate the extent to which you agree or disagree with each of the following statements.</p>
+
+      <form method="POST" action="/open-ended">
+        <input type="hidden" name="__tracking" value="">
+
+        <fieldset class="likert-group">
+          <legend>1. The government should invest more in renewable energy sources.</legend>
+          <div class="likert-scale">
+            <label><input type="radio" name="opinion_1" value="1" required> Strongly Disagree</label>
+            <label><input type="radio" name="opinion_1" value="2"> Disagree</label>
+            <label><input type="radio" name="opinion_1" value="3"> Somewhat Disagree</label>
+            <label><input type="radio" name="opinion_1" value="4"> Neutral</label>
+            <label><input type="radio" name="opinion_1" value="5"> Somewhat Agree</label>
+            <label><input type="radio" name="opinion_1" value="6"> Agree</label>
+            <label><input type="radio" name="opinion_1" value="7"> Strongly Agree</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="likert-group">
+          <legend>2. Climate change is primarily caused by human activities.</legend>
+          <div class="likert-scale">
+            <label><input type="radio" name="opinion_2" value="1" required> Strongly Disagree</label>
+            <label><input type="radio" name="opinion_2" value="2"> Disagree</label>
+            <label><input type="radio" name="opinion_2" value="3"> Somewhat Disagree</label>
+            <label><input type="radio" name="opinion_2" value="4"> Neutral</label>
+            <label><input type="radio" name="opinion_2" value="5"> Somewhat Agree</label>
+            <label><input type="radio" name="opinion_2" value="6"> Agree</label>
+            <label><input type="radio" name="opinion_2" value="7"> Strongly Agree</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="likert-group">
+          <legend>3. Environmental regulations place too heavy a burden on businesses.</legend>
+          <div class="likert-scale">
+            <label><input type="radio" name="opinion_3" value="1" required> Strongly Disagree</label>
+            <label><input type="radio" name="opinion_3" value="2"> Disagree</label>
+            <label><input type="radio" name="opinion_3" value="3"> Somewhat Disagree</label>
+            <label><input type="radio" name="opinion_3" value="4"> Neutral</label>
+            <label><input type="radio" name="opinion_3" value="5"> Somewhat Agree</label>
+            <label><input type="radio" name="opinion_3" value="6"> Agree</label>
+            <label><input type="radio" name="opinion_3" value="7"> Strongly Agree</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="likert-group">
+          <legend>4. Carbon taxes are an effective way to reduce emissions.</legend>
+          <div class="likert-scale">
+            <label><input type="radio" name="opinion_4" value="1" required> Strongly Disagree</label>
+            <label><input type="radio" name="opinion_4" value="2"> Disagree</label>
+            <label><input type="radio" name="opinion_4" value="3"> Somewhat Disagree</label>
+            <label><input type="radio" name="opinion_4" value="4"> Neutral</label>
+            <label><input type="radio" name="opinion_4" value="5"> Somewhat Agree</label>
+            <label><input type="radio" name="opinion_4" value="6"> Agree</label>
+            <label><input type="radio" name="opinion_4" value="7"> Strongly Agree</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="likert-group">
+          <legend>5. Individual lifestyle changes can make a meaningful difference in combating climate change.</legend>
+          <div class="likert-scale">
+            <label><input type="radio" name="opinion_5" value="1" required> Strongly Disagree</label>
+            <label><input type="radio" name="opinion_5" value="2"> Disagree</label>
+            <label><input type="radio" name="opinion_5" value="3"> Somewhat Disagree</label>
+            <label><input type="radio" name="opinion_5" value="4"> Neutral</label>
+            <label><input type="radio" name="opinion_5" value="5"> Somewhat Agree</label>
+            <label><input type="radio" name="opinion_5" value="6"> Agree</label>
+            <label><input type="radio" name="opinion_5" value="7"> Strongly Agree</label>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-next">Next</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="/tracker.js"></script>
+</body>
+</html>

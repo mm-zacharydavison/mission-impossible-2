@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Survey - Consent</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Research Survey</h1>
+  </header>
+
+  <main>
+    <section class="survey-section">
+      <h2>Informed Consent</h2>
+
+      <div class="consent-text">
+        <p>
+          You are being invited to participate in a research study on public
+          attitudes toward climate policy. This study is conducted by
+          researchers at a university and has been reviewed and approved by the
+          Institutional Review Board (IRB). Your participation is entirely
+          voluntary, and you may withdraw at any time without penalty. The
+          survey will take approximately 10-15 minutes to complete. All
+          responses are collected anonymously, and no personally identifiable
+          information will be recorded or stored alongside your answers.
+        </p>
+        <p>
+          The data collected in this study will be used solely for academic
+          research purposes and may be included in published papers or
+          presentations in aggregate form only. There are no known risks
+          associated with participation beyond those encountered in everyday
+          life. By checking the box below, you acknowledge that you have read
+          and understood this consent information, that you are at least 18
+          years of age, and that you agree to participate in this study. If you
+          have any questions about this research, please contact the principal
+          investigator at the email address provided in the study description.
+        </p>
+      </div>
+
+      <form method="POST" action="/demographics">
+        <input type="hidden" name="__tracking" value="">
+
+        <label class="checkbox-label">
+          <input type="checkbox" name="consent" value="yes" required>
+          I agree to participate in this research study.
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-next">Next</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/tracker.js"></script>
+</body>
+</html>

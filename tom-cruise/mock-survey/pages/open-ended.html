@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Survey - Open-Ended Response</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header><h1>Research Survey</h1></header>
+  <main>
+    <section class="survey-section">
+      <h2>Open-Ended Response</h2>
+      <p>In your own words, describe your views on climate policy and why you hold them. Please write at least 3 sentences.</p>
+
+      <form method="POST" action="/dictator">
+        <input type="hidden" name="__tracking" value="">
+
+        <div class="form-group">
+          <textarea name="open_ended" id="open_ended" rows="8" cols="60"
+                    required placeholder="Type your response here..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-next">Next</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="/tracker.js"></script>
+</body>
+</html>

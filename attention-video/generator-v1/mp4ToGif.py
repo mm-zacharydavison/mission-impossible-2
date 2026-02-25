@@ -1,3 +1,12 @@
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.8"
+# dependencies = [
+#     "imageio",
+#     "imageio-ffmpeg",
+#     "pillow",
+# ]
+# ///
 import argparse
 from PIL import Image
 import imageio

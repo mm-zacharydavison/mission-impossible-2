@@ -1,4 +1,15 @@
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.8"
+# dependencies = [
+#     "imageio",
+#     "imageio-ffmpeg",
+#     "pillow",
+#     "numpy",
+# ]
+# ///
 # flicker_vertical_loops_gap.py
+import argparse
 import imageio
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
@@ -6,11 +17,10 @@ import numpy as np
 # ============== Canvas / output ==============
 WIDTH, HEIGHT = 1000, 300
 FPS = 60
-OUTPUT_FILE = "va.mp4"
 
 # ============== Content and loops ==============
-INPUT = "3169"            # up to 9 characters work
-LOOPS = 4                 # how many full passes over INPUT
+DEFAULT_INPUT = "3169"   # up to 9 characters work
+LOOPS = 4                # how many full passes over INPUT
 
 # Blank columns to include inside each loop (set to 0 for minimal loop pause)
 PAD_COLS_START = 0        # leading spaces inside every loop
@@ -20,9 +30,10 @@ PAD_COLS_BETWEEN_LOOPS = 0  # extra blanks inserted between loops
 # ============== Font ==============
 FONT_SIZE = 125
 FONT_CANDIDATES = [
-    #"/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
-    #"RobotoMono-Bold.ttf",
-    #"/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf",
+    "/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf",
     "C:/Windows/Fonts/consolab.ttf",
     "C:/Windows/Fonts/consola.ttf",
     "C:/Windows/Fonts/cour.ttf",
@@ -64,87 +75,115 @@ def measure_char(font):
     except Exception:
         return font.getsize("0")
 
-# -----------------------------------------------------
-# Build sequence across loops
-# -----------------------------------------------------
-font = load_font(FONT_CANDIDATES, FONT_SIZE)
-char_w, char_h = measure_char(font)
 
-loop_text = (" " * PAD_COLS_START) + INPUT + (" " * PAD_COLS_END)
-BASE_COLS = len(loop_text)
+def generate(input_digits: str, output_file: str) -> str:
+    """Render a scrolling-digit video and return the output path."""
+    font = load_font(FONT_CANDIDATES, FONT_SIZE)
+    char_w, char_h = measure_char(font)
 
-seq = []
-for k in range(LOOPS):
-    if k > 0 and PAD_COLS_BETWEEN_LOOPS > 0:
-        seq.extend([" "] * PAD_COLS_BETWEEN_LOOPS)
-    seq.extend(list(loop_text))
-TOTAL_ITEMS = len(seq)
+    # -----------------------------------------------------
+    # Build sequence across loops
+    # -----------------------------------------------------
+    loop_text = (" " * PAD_COLS_START) + input_digits + (" " * PAD_COLS_END)
+    BASE_COLS = len(loop_text)
 
-# Horizontal centering using one loop’s width
-if BASE_COLS <= 1:
-    letter_spacing_final = 0.0
-else:
-    available_w = max(0.0, WIDTH - 2 * MARGIN_X - BASE_COLS * char_w)
-    fits_spacing = available_w / (BASE_COLS - 1) if BASE_COLS > 1 else 0.0
-    letter_spacing_final = LETTER_SPACING
-    if AUTO_FIT_TO_WIDTH:
-        letter_spacing_final = max(MIN_LETTER_SPACING, min(LETTER_SPACING, fits_spacing))
+    seq = []
+    for k in range(LOOPS):
+        if k > 0 and PAD_COLS_BETWEEN_LOOPS > 0:
+            seq.extend([" "] * PAD_COLS_BETWEEN_LOOPS)
+        seq.extend(list(loop_text))
+    TOTAL_ITEMS = len(seq)
 
-row_w = BASE_COLS * char_w + (BASE_COLS - 1) * letter_spacing_final
-base_x = (WIDTH - row_w) / 2.0
-step_x = char_w + letter_spacing_final
-x_positions = [base_x + (i % BASE_COLS) * step_x for i in range(TOTAL_ITEMS)]
-
-# -----------------------------------------------------
-# Derive vertical motion from timing
-# -----------------------------------------------------
-# Constant speed so each visible pass lasts SHOW_SECONDS
-speed_px_per_sec   = HEIGHT / float(SHOW_SECONDS)
-speed_px_per_frame = speed_px_per_sec / float(FPS)
-
-# Vertical strides
-stride_items_px = HEIGHT + GAP_SECONDS * speed_px_per_sec
-stride_loop_px  = HEIGHT + GAP_SECONDS_BETWEEN_LOOPS * speed_px_per_sec
-
-# Build a stride list where the seam between loops uses stride_loop_px
-strides = []
-for i in range(TOTAL_ITEMS - 1):
-    # Detect if i is the last column of a loop_text block
-    is_end_of_loop = ((i + 1) % BASE_COLS == 0)
-    if is_end_of_loop:
-        strides.append(stride_loop_px)
+    # Horizontal centering using one loop's width
+    if BASE_COLS <= 1:
+        letter_spacing_final = 0.0
     else:
-        strides.append(stride_items_px)
+        available_w = max(0.0, WIDTH - 2 * MARGIN_X - BASE_COLS * char_w)
+        fits_spacing = available_w / (BASE_COLS - 1) if BASE_COLS > 1 else 0.0
+        letter_spacing_final = LETTER_SPACING
+        if AUTO_FIT_TO_WIDTH:
+            letter_spacing_final = max(MIN_LETTER_SPACING, min(LETTER_SPACING, fits_spacing))
 
-# Cumulative y positions
-y_positions = [0.0]
-for s in strides:
-    y_positions.append(y_positions[-1] + s)
+    row_w = BASE_COLS * char_w + (BASE_COLS - 1) * letter_spacing_final
+    base_x = (WIDTH - row_w) / 2.0
+    step_x = char_w + letter_spacing_final
+    x_positions = [base_x + (i % BASE_COLS) * step_x for i in range(TOTAL_ITEMS)]
 
-# Total time: initial delay + time to traverse all strides + last digit’s SHOW + final blank
-total_seconds = INITIAL_DELAY_SECONDS + (sum(strides) / speed_px_per_sec) + SHOW_SECONDS + FINAL_BLANK_SECONDS
-total_frames = int(round(total_seconds * FPS))
+    # -----------------------------------------------------
+    # Derive vertical motion from timing
+    # -----------------------------------------------------
+    # Constant speed so each visible pass lasts SHOW_SECONDS
+    speed_px_per_sec   = HEIGHT / float(SHOW_SECONDS)
+    speed_px_per_frame = speed_px_per_sec / float(FPS)
 
-# Start so first digit appears after the initial delay
-start_scroll = -(HEIGHT + speed_px_per_sec * INITIAL_DELAY_SECONDS)
+    # Vertical strides
+    stride_items_px = HEIGHT + GAP_SECONDS * speed_px_per_sec
+    stride_loop_px  = HEIGHT + GAP_SECONDS_BETWEEN_LOOPS * speed_px_per_sec
 
-# -----------------------------------------------------
-# Render
-# -----------------------------------------------------
-with imageio.get_writer(OUTPUT_FILE, fps=FPS, quality=9, macro_block_size=1) as writer:
-    for f in range(total_frames):
-        scroll_top = start_scroll + f * speed_px_per_frame
+    # Build a stride list where the seam between loops uses stride_loop_px
+    strides = []
+    for i in range(TOTAL_ITEMS - 1):
+        # Detect if i is the last column of a loop_text block
+        is_end_of_loop = ((i + 1) % BASE_COLS == 0)
+        if is_end_of_loop:
+            strides.append(stride_loop_px)
+        else:
+            strides.append(stride_items_px)
 
-        img = Image.new("RGB", (WIDTH, HEIGHT), COLOR_BG)
-        draw = ImageDraw.Draw(img)
+    # Cumulative y positions
+    y_positions = [0.0]
+    for s in strides:
+        y_positions.append(y_positions[-1] + s)
 
-        # Draw only the item that is currently in the window
-        for ch, x, y in zip(seq, x_positions, y_positions):
-            y_screen = y - scroll_top
-            if 0 <= y_screen < HEIGHT:
-                if ch != " ":
-                    draw.text((x, y_screen), ch, font=font, fill=COLOR_TEXT)
+    # Total time: initial delay + time to traverse all strides + last digit's SHOW + final blank
+    total_seconds = INITIAL_DELAY_SECONDS + (sum(strides) / speed_px_per_sec) + SHOW_SECONDS + FINAL_BLANK_SECONDS
+    total_frames = int(round(total_seconds * FPS))
 
-        writer.append_data(np.array(img))
+    # Start so first digit appears after the initial delay
+    start_scroll = -(HEIGHT + speed_px_per_sec * INITIAL_DELAY_SECONDS)
 
-print(f"Video saved successfully as {OUTPUT_FILE}")
+    # -----------------------------------------------------
+    # Render
+    # -----------------------------------------------------
+    with imageio.get_writer(output_file, fps=FPS, quality=9, macro_block_size=1) as writer:
+        for f in range(total_frames):
+            scroll_top = start_scroll + f * speed_px_per_frame
+
+            img = Image.new("RGB", (WIDTH, HEIGHT), COLOR_BG)
+            draw = ImageDraw.Draw(img)
+
+            # Draw only the item that is currently in the window
+            for ch, x, y in zip(seq, x_positions, y_positions):
+                y_screen = y - scroll_top
+                if 0 <= y_screen < HEIGHT:
+                    if ch != " ":
+                        draw.text((x, y_screen), ch, font=font, fill=COLOR_TEXT)
+
+            writer.append_data(np.array(img))
+
+    print(f"Video saved successfully as {output_file}")
+    return output_file
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate a scrolling-digit attention-check video (MP4)."
+    )
+    parser.add_argument(
+        "digits",
+        nargs="?",
+        default=DEFAULT_INPUT,
+        help="Digit sequence to display, e.g. '3169' (default: %(default)s)",
+    )
+    parser.add_argument(
+        "-o", "--output",
+        default="va.mp4",
+        help="Output MP4 file path (default: %(default)s)",
+    )
+    args = parser.parse_args()
+
+    generate(args.digits, args.output)
+
+
+if __name__ == "__main__":
+    main()
